@@ -26,10 +26,12 @@ class HomeBuyViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let userRegister = storyBoard.instantiateViewController(withIdentifier: "BuyCategory") as! BuyCategoryViewController
         userRegister.str_Category = Category[indexPath.row]
         self.present(userRegister, animated: true, completion: nil)
+    
     }
     
     @IBAction func action_Back(_ sender: Any) {

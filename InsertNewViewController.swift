@@ -8,42 +8,44 @@
 
 import UIKit
 
-class InsertNewViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class InsertNewViewController: UIViewController, UITextFieldDelegate{
     
     
     var str_key = ""
+    var str_category = ""
+    var str_user_contact = ""
     
-    var Category: [String] = ["Lifestyle", "Electronics", "Books", "Furniture", "Stationary", "Beauty", "Toys and Baby"]
+    @IBOutlet weak var text_Desc: UITextField!
+    @IBOutlet weak var text_Price: UITextField!
+    @IBOutlet weak var text_Name: UITextField!
+    @IBOutlet weak var label_Category: UILabel!
+    @IBOutlet weak var label_invalid: UILabel!
+    
     var ItemName: [String] = []
     var ItemUser: [String] = []
     var ItemPrice: [String] = []
     var ItemCategory: [String] = []
     var ItemDesc: [String] = []
-    
-    
-    @IBOutlet weak var label_invalid: UILabel!
-    @IBOutlet weak var table_Category: UITableView!
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Category.count
-    
-    }
+    var ItemUserContact: [String] = []
+    var ItemSeller: [String] = []
     
     @IBAction func action_AddItem(_ sender: Any) {
     
-        if(text_Category.text != "" && text_Desc.text != "" && text_Name.text != "" && text_Price.text != "")
+        if(text_Desc.text != "" && text_Name.text != "" && text_Price.text != "")
         {
-            ItemCategory.append(text_Category.text!)
+            ItemCategory.append(str_category)
             ItemUser.append(str_key)
             ItemPrice.append(text_Price.text!)
             ItemName.append(text_Name.text!)
             ItemDesc.append(text_Desc.text!)
+            ItemUserContact.append(str_user_contact)
             
             UserDefaults.standard.set(ItemDesc, forKey: "ItemDescArray")
             UserDefaults.standard.set(ItemName, forKey: "ItemNameArray")
             UserDefaults.standard.set(ItemCategory, forKey: "ItemCategoryArray")
             UserDefaults.standard.set(ItemPrice, forKey: "ItemPriceArray")
             UserDefaults.standard.set(ItemUser, forKey: "ItemUserArray")
+            UserDefaults.standard.set(ItemUserContact, forKey: "ItemUserContactArray")
     
             dismiss(animated: true, completion: nil)
         }
@@ -53,18 +55,15 @@ class InsertNewViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "InsertNewCell", for: indexPath)
-        cell.textLabel?.text = Category[indexPath.row]
-        return cell
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.resignFirstResponder()
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        text_Category.text = Category[indexPath.row]
-        table_Category.isHidden = true
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
-    
     
     @IBAction func action_Back(_ sender: Any) {
         
@@ -72,35 +71,24 @@ class InsertNewViewController: UIViewController, UITableViewDelegate, UITableVie
         
     }
     
-    @IBAction func action_add(_ sender: Any) {
-        table_Category.isHidden = false
-    }
-    
-    @IBOutlet weak var text_Desc: UITextField!
-    @IBOutlet weak var text_Price: UITextField!
-    @IBOutlet weak var text_Name: UITextField!
-    @IBOutlet weak var text_Category: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        table_Category.isHidden = true
+        text_Name.delegate = self
+        text_Desc.delegate = self
+        text_Price.delegate = self
+        
         label_invalid.isHidden = true
-        table_Category.layer.borderColor = UIColor.black.cgColor
-        table_Category.layer.borderWidth = 1
+        label_Category.text = str_category
         
         ItemDesc = UserDefaults.standard.stringArray(forKey: "ItemDescArray") ?? [""]
         ItemName = UserDefaults.standard.stringArray(forKey: "ItemNameArray") ?? [""]
         ItemCategory = UserDefaults.standard.stringArray(forKey: "ItemCategoryArray") ?? [""]
         ItemPrice = UserDefaults.standard.stringArray(forKey: "ItemPriceArray") ?? [""]
         ItemUser = UserDefaults.standard.stringArray(forKey: "ItemUserArray") ?? [""]
+        ItemUserContact = UserDefaults.standard.stringArray(forKey: "ItemUserContactArray") ?? [""]
         
-      /*  let   Items1 = UserDefaults.standard.object(forKey: str_key) as? Data
-        if Items1 != nil {
-            Items = NSKeyedUnarchiver.unarchiveObject(with: Items1!) as! [ItemModel]
-        }
- 
-        */
         // Do any additional setup after loading the view.
     }
 
@@ -109,7 +97,6 @@ class InsertNewViewController: UIViewController, UITableViewDelegate, UITableVie
         // Dispose of any resources that can be recreated.
     }
     
-
     /*
     // MARK: - Navigation
 

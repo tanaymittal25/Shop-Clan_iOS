@@ -8,8 +8,7 @@
 
 import UIKit
 
-class ForgotPasswordViewController: UIViewController {
-    
+class ForgotPasswordViewController: UIViewController, UITextFieldDelegate {
     
     var Email: [String] = []
     var User: [String] = []
@@ -23,13 +22,23 @@ class ForgotPasswordViewController: UIViewController {
     @IBOutlet weak var text_User: UITextField!
     @IBOutlet weak var text_Email: UITextField!
     @IBOutlet weak var text_Confirm: UITextField!
+    
     @IBAction func action_Back(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    
     @IBAction func action_Continue(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.resignFirstResponder()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
     @IBAction func action_Change(_ sender: Any) {
         
@@ -75,6 +84,7 @@ class ForgotPasswordViewController: UIViewController {
         User = UserDefaults.standard.stringArray(forKey: "UserArray") ?? [""]
         Name = UserDefaults.standard.stringArray(forKey: "NameArray") ?? [""]
         Password = UserDefaults.standard.stringArray(forKey: "PasswordArray") ?? [""]
+        
         label_invalid.isHidden = true
         btn_continue.isHidden = true
         
@@ -82,6 +92,12 @@ class ForgotPasswordViewController: UIViewController {
         print(User)
         print(Name)
         print(Password)
+        
+        text_Password.delegate = self
+        text_Email.delegate = self
+        text_Name.delegate = self
+        text_User.delegate = self
+        text_Confirm.delegate = self
         
          // Do any additional setup after loading the view.
     }
